@@ -1,2 +1,8 @@
 # Flclash-scripts
-A repository for Flclash scripts
+A repository for Flclash scripts.
+
+脚本1：分流细致，分组很多，功能较为丰富。具体介绍：https://linux.do/t/topic/995297
+
+脚本2：仅分组，移除了脚本1中的大多数分流规则，仅保留了对广告屏蔽规则，策略组数量大大减少。同时对订阅源节点不固定场景进行了优化，动态生成节点组。具体介绍：https://linux.do/t/topic/1010793
+
+脚本3：在脚本2的基础上进一步简化，并引入了节点过滤。具体介绍：https://linux.do/t/topic/1063863
