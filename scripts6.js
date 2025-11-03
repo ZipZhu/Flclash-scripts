@@ -1,14 +1,16 @@
 function main(config) {
   const originalProxies = config.proxies || [];
 
-  const filterKeywords = ['群', '邀请', '返利', '循环', '官网', '客服', '网站', '网址', '获取', '订阅', '流量', '到期', '续费', '购买', '机场', '下次', '版本', '官址', '备用', '过期', '已用', '联系', '邮箱', '工单', '贩卖', '通知', '倒卖', '防止', '国内', '建议', '地址', '频道', '无法', '说明', '使用', '提示', '特别', '访问', '支持', '10x', '8x', '6x'];
-  const keywordRegex = new RegExp(filterKeywords.join('|'));
-  
-  const allProxies = originalProxies.filter(proxy => !keywordRegex.test(proxy.name));
+  const filterKeywords = [
+    '群', '邀请', '返利', '循环', '官网', '客服', '网站', '网址', '获取', '订阅', '流量',
+    '到期', '续费', '购买', '机场', '下次', '版本', '官址', '备用', '过期', '已用', '联系',
+    '邮箱', '工单', '贩卖', '通知', '倒卖', '防止', '国内', '建议', '地址', '频道', '无法',
+    '说明', '使用', '提示', '特别', '访问', '支持', '10x', '8x', '6x'
+  ];
 
-  if (allProxies.length === 0) {
-    return config;
-  }
+  const keywordRegex = new RegExp(filterKeywords.join('|'));
+  const allProxies = originalProxies.filter(proxy => !keywordRegex.test(proxy.name));
+  if (allProxies.length === 0) return config;
 
   const ICON_BASE = "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/";
   const RULE_BASE = "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/";
@@ -17,23 +19,23 @@ function main(config) {
   const regionFilters = {
     "美国节点": {
       icon: `${ICON_BASE}United_States.png`,
-      filter: "美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|us|Us|United States|united states|United states|UNITED STATES"
+      filter: "美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|us|United States"
     },
     "日本节点": {
       icon: `${ICON_BASE}Japan.png`,
-      filter: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|jp|Jp|Japan|JAPAN|japan|JAPAN"
+      filter: "日本|东京|大阪|JP|jp|Japan"
     },
     "狮城节点": {
       icon: `${ICON_BASE}Singapore.png`,
-      filter: "新加坡|坡|狮城|SG|sg|Sg|Singapore|SINGAPORE|singapore"
+      filter: "新加坡|狮城|SG|sg|Singapore"
     },
     "香港节点": {
       icon: `${ICON_BASE}Hong_Kong.png`,
-      filter: "港|HK|hk|Hk|Hong Kong|HONG KONG|Hong kong|hong kong"
+      filter: "港|HK|hk|Hong Kong"
     },
     "台湾节点": {
       icon: `${ICON_BASE}Taiwan.png`,
-      filter: "台|新北|彰化|TW|tw|Tw|Taiwan|TAIWAN|taiwan|TAIWAN"
+      filter: "台|新北|彰化|TW|tw|Taiwan"
     }
   };
 
@@ -43,7 +45,6 @@ function main(config) {
   }));
 
   const foundRegions = new Set();
-
   for (const proxy of allProxies) {
     for (const filter of compiledFilters) {
       if (filter.regex.test(proxy.name)) {
@@ -54,23 +55,14 @@ function main(config) {
   }
 
   const availableRegionsList = Object.keys(regionFilters).filter(name => foundRegions.has(name));
-
-  const mainProxiesList = [
-    "节点选择",
-    ...availableRegionsList,
-    "手动切换",
-    "DIRECT"
-  ];
+  const mainProxiesList = ["节点选择", ...availableRegionsList, "手动切换", "DIRECT"];
 
   const proxyGroups = [
     {
       name: "节点选择",
       icon: `${ICON_BASE}Proxy.png`,
       type: "select",
-      proxies: [
-        ...availableRegionsList,
-        "手动切换"
-      ]
+      proxies: [...availableRegionsList, "手动切换"]
     }
   ];
 
@@ -88,11 +80,11 @@ function main(config) {
 
   proxyGroups.push({
     name: "手动切换",
-    icon: `${ICON_BASE}Select.png`,
+    icon: `${ICON_BASE}Available.png`,
     "include-all": true,
     type: "select"
   });
- 
+
   proxyGroups.push({
     name: "GLOBAL",
     icon: `${ICON_BASE}Global.png`,
@@ -127,6 +119,5 @@ function main(config) {
   ];
 
   config.proxies = allProxies;
-
   return config;
 }
