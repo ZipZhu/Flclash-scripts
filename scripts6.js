@@ -13,7 +13,7 @@ function main(config) {
   if (allProxies.length === 0) return config;
 
   const ICON_BASE = "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
-  const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
+  const RULE_BASE = "";
   const URL_TEST_DEFAULT = { interval: 300, tolerance: 50 };
 
   const regionFilters = {
