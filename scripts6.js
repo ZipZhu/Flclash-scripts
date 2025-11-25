@@ -9,6 +9,7 @@ const filterKeywords=['群','邀请','返利','官网','官方','网址','订阅
 
   const ICON_BASE = "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/";
   const RULE_BASE = "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/";
+  
   const URL_TEST_DEFAULT = { interval: 300, tolerance: 50 };
 
   const regionFilters = {
