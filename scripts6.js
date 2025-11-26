@@ -97,7 +97,7 @@ const filterKeywords=['群','邀请','返利','官网','官方','网址','订阅
     BanProgramAD: { url: `${RULE_BASE}BanProgramAD.list`, path: "./ruleset/BanProgramAD.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
     ProxyGFWlist: { url: `${RULE_BASE}ProxyGFWlist.list`, path: "./ruleset/ProxyGFWlist.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
     ChinaDomain: { url: `${RULE_BASE}ChinaDomain.list`, path: "./ruleset/ChinaDomain.list", behavior: "domain", interval: 86400, format: "text", type: "http" },
-    ChinaCompanyIp: { url: `${RULE_BASE}ChinaCompanyIp.list`, path: "./ruleset/ChinaCompanyIp.list", behavior: "ipcidr", interval: 86400, format: "text", type: "http" },
+    ChinaCompanyIp: { url: `${RULE_BASE}ChinaCompanyIp.list`, path: "./ruleset/ChinaCompanyIp.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
     Download: { url: `${RULE_BASE}Download.list`, path: "./ruleset/Download.list", behavior: "classical", interval: 86400, format: "text", type: "http" }
   };
 
