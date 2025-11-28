@@ -32,9 +32,9 @@
   * 将 icon 与 rule 从**硬编码 URL**改为**变量拼接**，方便根据网络情况灵活修改上游源。
   * 当前源：
 
-    ```js
-    const ICON_BASE = "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/";
-    const RULE_BASE = "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/";
+    ```
+    const ICON_BASE = "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
+    const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
     ```
 
 ---
