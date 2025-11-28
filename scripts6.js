@@ -1,15 +1,15 @@
 function main(config) {
   const originalProxies = config.proxies || [];
 
-const filterKeywords=['群','邀请','返利','官网','官方','网址','订阅','购买','续费','剩余','到期','过期','流量','备用','邮箱','客服','联系','工单','倒卖','防止','节点','代理','梯子','tg'];
+  const filterKeywords = ['群', '邀请', '返利', '官网', '官方', '网址', '订阅', '购买', '续费', '剩余', '到期', '过期', '流量', '备用', '邮箱', '客服', '联系', '工单', '倒卖', '防止', '节点', '代理', '梯子', 'tg'];
 
   const keywordRegex = new RegExp(filterKeywords.join('|'), 'i');
   const allProxies = originalProxies.filter(proxy => !keywordRegex.test(proxy.name));
   if (allProxies.length === 0) return config;
 
-  const ICON_BASE = "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/";
-  const RULE_BASE = "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/";
-  
+  const ICON_BASE = "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
+  const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
+
   const URL_TEST_DEFAULT = { interval: 300, tolerance: 50 };
 
   const regionFilters = {
