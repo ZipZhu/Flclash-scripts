@@ -1,7 +1,7 @@
 function main(config) {
   const originalProxies = config.proxies || [];
 
-const filterKeywords=['群','邀请','返利','官网','官方','网址','订阅','购买','续费','剩余','到期','过期','流量','备用','邮箱','客服','联系','工单','倒卖','防止','机场','节点','代理','梯子','tg'];
+const filterKeywords=['群','邀请','返利','官网','官方','网址','订阅','购买','续费','剩余','到期','过期','流量','备用','邮箱','客服','联系','工单','倒卖','防止','节点','代理','梯子','tg'];
 
   const keywordRegex = new RegExp(filterKeywords.join('|'), 'i');
   const allProxies = originalProxies.filter(proxy => !keywordRegex.test(proxy.name));
