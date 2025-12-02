@@ -37,7 +37,7 @@
     const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
     ```
 
-* **scripts7**：在 scripts6 的基础上进行了深度优化与重构：
+* **scripts7**：在 scripts6 的基础上进行优化：
   * 新增“倍率过滤”，当前设置为过滤3倍以上的节点
   * 全量遍历优化为基于.some0方法的短路检测，避免不必要的计算
   * 调整正则匹配策略，关键词过滤移除了1标记，改为严格匹配大小写
