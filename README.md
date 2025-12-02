@@ -37,7 +37,7 @@
     const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
     ```
 
-* **scripts7**：在 scripts6 的基础上进行优化：
+* **scripts7**：在 scripts6 的基础上进行优化（详细介绍：https://linux.do/t/topic/1251899） ：
   * 新增“倍率过滤”，当前设置为过滤3倍以上的节点
   * 全量遍历优化为基于 `.some()` 方法的短路检测，避免不必要的计算
   * 调整正则匹配策略，关键词过滤移除了 `i` 标记，改为严格匹配大小写
@@ -45,6 +45,7 @@
     1. 代码严格按照 `常量定义 -> 数据清洗 (Filter) -> 地区探测 (Detect) -> 组装 (Build)` 的顺序排列，符合人类阅读习惯
     2. 将地区定义改为标准的 `REGIONS` 数组对象，直接遍历，去除了所有不必要的中间转换
     3. 移除了 `URL_TEST_DEFAULT` 等利用率低的中间变量
+
 ---
 
 **持续优化中，欢迎反馈使用体验！**
