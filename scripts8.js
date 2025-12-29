@@ -102,7 +102,6 @@ function main(config) {
     "RULE-SET,UnBan,DIRECT",
     "RULE-SET,BanAD,REJECT",
     "RULE-SET,BanProgramAD,REJECT",
-    "DOMAIN-SUFFIX,services.googleapis.cn,节点选择", 
     "RULE-SET,GoogleCNProxyIP,节点选择",
     "RULE-SET,ProxyGFWlist,节点选择",
     "RULE-SET,ChinaMedia,DIRECT",
