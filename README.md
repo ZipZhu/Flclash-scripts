@@ -5,14 +5,14 @@
 ---
 
 * **scripts1**：分流细致、分组丰富、功能全面。
-  详细介绍：[https://linux.do/t/topic/995297](https://linux.do/t/topic/995297)
+  详细介绍：https://linux.do/t/topic/995297
 
 * **scripts2**：仅保留分组，移除 scripts1 中大部分分流规则，仅保留广告屏蔽。策略组大幅精简。
   针对订阅源节点不固定场景优化，支持**动态生成节点组**。
-  详细介绍：[https://linux.do/t/topic/1010793](https://linux.do/t/topic/1010793)
+  详细介绍：https://linux.do/t/topic/1010793
 
 * **scripts3**：在 scripts2 基础上进一步简化，**引入节点名称过滤**。
-  详细介绍：[https://linux.do/t/topic/1063863](https://linux.do/t/topic/1063863)
+  详细介绍：https://linux.do/t/topic/1063863
 
 * **scripts4**：与 scripts3 功能相同，**仅图标 CDN 不同**：
 
@@ -24,7 +24,7 @@
 
   因此，在 scripts4 的基础上进行优化，**移除了大小写匹配标志，改为穷举所有大小写组合**。
   （方法笨，但胜在稳定有效）
-  详细介绍：[https://linux.do/t/topic/1092160](https://linux.do/t/topic/1092160)
+  详细介绍：https://linux.do/t/topic/1092160
 
 * **scripts6**：近期出现 **icon 资源加载异常** 问题。
   在 scripts5 的基础上进行了调整：
@@ -48,7 +48,7 @@
 
 * **scripts8**：在 scripts7 的基础上新增了三个规则提供者：`ChinaIp`  `ChinaMedia` `GoogleCNProxyIP`。优化了一下节点倍率识别。
 
-* **scripts9**：在 scripts8 的基础上移除了对“手动选择”策略组的过滤，防止脚本运行之后误杀导致部分节点不出现。
+* **scripts9**：在 scripts8 的基础上移除了对“手动选择”策略组的过滤，防止脚本运行之后误杀导致部分节点不出现。详细介绍：https://linux.do/t/topic/1383821
 
 
 
