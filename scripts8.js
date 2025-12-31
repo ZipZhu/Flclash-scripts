@@ -3,7 +3,7 @@ function main(config) {
   const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
 
   const maxRatio = 3.0;
-  const ratioRegex = /(?:x|X|倍率?)\s?(\d+\.?\d*)/;
+  const ratioRegex = /(\d+(?:\.\d+)?)\s*(?:x|X|×|倍)|(?:x|X|×|倍)\s*(\d+(?:\.\d+)?)/;
 
   const filterKeywords = [
     '群', '邀请', '返利', '官网', '官方', '网址', '订阅', '购买', '续费', '剩余',
@@ -19,7 +19,7 @@ function main(config) {
 
     const ratioMatch = proxy.name.match(ratioRegex);
     if (ratioMatch) {
-      const ratio = parseFloat(ratioMatch[1]);
+      const ratio = parseFloat(ratioMatch[1] || ratioMatch[2]);
       if (ratio > maxRatio) return false;
     }
     return true;
@@ -28,9 +28,9 @@ function main(config) {
   if (filteredProxies.length === 0) return config;
 
   const REGIONS = [
-    { name: "美国节点", pattern: "美|纽约|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States", icon: "United_States.png" },
+    { name: "美国节点", pattern: "美|纽约|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|SJC", icon: "United_States.png" },
     { name: "日本节点", pattern: "日本|东京|大阪|JP|Japan", icon: "Japan.png" },
-    { name: "狮城节点", pattern: "新加坡|狮城|SG|Singapore", icon: "Singapore.png" },
+    { name: "狮城节点", pattern: "新加坡|狮城|SG|Singapore|SIN", icon: "Singapore.png" },
     { name: "香港节点", pattern: "港|HK|Hong Kong", icon: "Hong_Kong.png" },
     { name: "台湾节点", pattern: "台|新北|彰化|TW|Taiwan", icon: "Taiwan.png" }
   ];
