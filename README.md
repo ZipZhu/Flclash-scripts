@@ -46,7 +46,7 @@
     2. 将地区定义改为标准的 `REGIONS` 数组对象，直接遍历，去除了所有不必要的中间转换
     3. 移除了 `URL_TEST_DEFAULT` 等利用率低的中间变量
 
-* **scripts8**：在 scripts7 的基础上新增了三个规则提供者：`ChinaIp`  `ChinaMedia` `GoogleCNProxyIP`。
+* **scripts8**：在 scripts7 的基础上新增了三个规则提供者：`ChinaIp`  `ChinaMedia` `GoogleCNProxyIP`。优化了一下节点倍率识别。
 
 
 
