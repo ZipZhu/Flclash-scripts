@@ -48,6 +48,8 @@
 
 * **scripts8**：在 scripts7 的基础上新增了三个规则提供者：`ChinaIp`  `ChinaMedia` `GoogleCNProxyIP`。优化了一下节点倍率识别。
 
+* **scripts9**：在 scripts8 的基础上移除了对“手动选择”策略组的过滤，防止脚本运行之后误杀导致部分节点不出现。
+
 
 
 ---
