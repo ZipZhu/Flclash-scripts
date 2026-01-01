@@ -109,8 +109,6 @@ function main(config) {
 
   config["rules"] = [
     "RULE-SET,applications,DIRECT",
-    "DOMAIN,clash.razord.top,DIRECT",
-    "DOMAIN,yacd.haishan.me,DIRECT",
     "RULE-SET,private,DIRECT",
     "RULE-SET,reject,REJECT",
     "RULE-SET,BanAD,REJECT",
