@@ -50,7 +50,7 @@
 
 * **scripts9**：在 scripts8 的基础上移除了对“手动选择”策略组的过滤，防止脚本运行之后误杀导致部分节点不出现。详细介绍：https://linux.do/t/topic/1383821
 
-
+* **scripts10**：jsDelivr 近期加强了对代理相关规则仓库的限制，导致直接通过 cdn.jsdelivr.net 访问这些链接时会提示“User blocked”。所以切换至稳定的 GitHub Raw 链接。同时引入了 AI 专项和精细的大厂服务分流，因为现在不仅使用了 ACL4SSR 维护的规则列表，所以取消了变量拼接。规则提供者从10个扩展至约23个，融合 Loyalsoldier 与 ACL4SSR 规则集，新增了对 AI、Telegram、Netflix 等海外服务的专用代理支持，以及更彻底的广告与隐私追踪阻断（如EasyPrivacy、BanEasyListChina），分流逻辑更精细全面。
 
 ---
 
