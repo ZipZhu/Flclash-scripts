@@ -52,6 +52,9 @@
 
 * **scripts10**：jsDelivr 近期加强了对代理相关规则仓库的限制，导致直接通过 cdn.jsdelivr.net 访问这些链接时会提示“User blocked”。所以切换至稳定的 GitHub Raw 链接。同时引入了 AI 专项和精细的大厂服务分流，因为现在不仅使用了 ACL4SSR 维护的规则列表，所以取消了变量拼接。规则提供者从10个扩展至约23个，融合 Loyalsoldier 与 ACL4SSR 规则集，新增了对 AI、Telegram、Netflix 等海外服务的专用代理支持，以及更彻底的广告与隐私追踪阻断（如EasyPrivacy、BanEasyListChina），分流逻辑更精细全面。
 
+* **scripts11**：因 jsDelivr 限制切换至 GitHub Raw 直链，规则提供者从 11 个扩展至 23 个。新增 AntiAD（20万+规则）和 AWAvenue 两大广告拦截利器，广告拦截规则从 2 个增至 7 个。融合 Loyalsoldier、ACL4SSR、anti-AD 和 AWAvenue 四大规则源，新增 AI、Telegram、Netflix、Apple、Microsoft 等精细服务分流。总规则覆盖从 ~1 万条提升至 ~24.5 万条，广告拦截效果提升。
+
+  
 ---
 
 **持续优化中，欢迎反馈使用体验！**
