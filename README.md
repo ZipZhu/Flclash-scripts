@@ -1,62 +1,33 @@
-# Flclash-scripts
-* Fork 自 [Koolson/Flclash-scripts](https://github.com/Koolson/Flclash-scripts)，我会根据自己的需求进行修改，也就是自用版本，自用版本，我会在其后面添加 `_ExpandForMe` 后缀。
+# Flclash-scripts_ExpandForMe
 
+* Fork 自 [Koolson/Flclash-scripts](https://github.com/Koolson/Flclash-scripts)，我会根据自己的需求进行修改，也就是自用版本，自用版本，我会在其后面添加 `_ExpandForMe` 后缀。
 
 脚本专为 **Flclash**制作，或可用于**Clash Verge Rev**，但后者未测试，不保证可用性与稳定性。
 
 ---
-
-* **scripts1**：分流细致、分组丰富、功能全面。
-  详细介绍：https://linux.do/t/topic/995297
-
-* **scripts2**：仅保留分组，移除 scripts1 中大部分分流规则，仅保留广告屏蔽。策略组大幅精简。
-  针对订阅源节点不固定场景优化，支持**动态生成节点组**。
-  详细介绍：https://linux.do/t/topic/1010793
-
-* **scripts3**：在 scripts2 基础上进一步简化，**引入节点名称过滤**。
-  详细介绍：https://linux.do/t/topic/1063863
-
-* **scripts4**：与 scripts3 功能相同，**仅图标 CDN 不同**：
-
-  * scripts3 使用 `testingcf.jsdelivr.net`
-  * scripts4 使用 `cdn.jsdelivr.net`（大多数场景下图片加载更流畅）
-
-* **scripts5**：虽然之前的脚本已在正则表达式中使用 `i` 标志，但在部分情况下仍存在大小写匹配异常。
-  尝试过在匹配前统一将节点名称转换为小写，但并未成功。 <img src="https://github.com/user-attachments/assets/bc8fcd52-e704-449c-98ae-6a02cf837be2" width="10%" alt="黄豆人流泪抱拳表情：我好没本领" />
-
-  因此，在 scripts4 的基础上进行优化，**移除了大小写匹配标志，改为穷举所有大小写组合**。
-  （方法笨，但胜在稳定有效）
-  详细介绍：https://linux.do/t/topic/1092160
-
-* **scripts6**：近期出现 **icon 资源加载异常** 问题。
-  在 scripts5 的基础上进行了调整：
-
-  * 将 icon 与 rule 从**硬编码 URL**改为**变量拼接**，方便根据网络情况灵活修改上游源。
-  * 当前源：
-
-    ```
-    const ICON_BASE = "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
-    const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
-    ```
-
-* **scripts7**：在 scripts6 的基础上进行优化（详细介绍：https://linux.do/t/topic/1251899 ）：
-  * 新增“倍率过滤”，当前设置为过滤3倍以上的节点
-  * 全量遍历优化为基于 `.some()` 方法的短路检测，避免不必要的计算
-  * 调整正则匹配策略，关键词过滤移除了 `i` 标记，改为严格匹配大小写
-  * 优化了代码结构与可读性：
-    1. 代码严格按照 `常量定义 -> 数据清洗 (Filter) -> 地区探测 (Detect) -> 组装 (Build)` 的顺序排列，符合人类阅读习惯
-    2. 将地区定义改为标准的 `REGIONS` 数组对象，直接遍历，去除了所有不必要的中间转换
-    3. 移除了 `URL_TEST_DEFAULT` 等利用率低的中间变量
-
-* **scripts8**：在 scripts7 的基础上新增了三个规则提供者：`ChinaIp`  `ChinaMedia` `GoogleCNProxyIP`。优化了一下节点倍率识别。
-
-* **scripts9**：在 scripts8 的基础上移除了对“手动选择”策略组的过滤，防止脚本运行之后误杀导致部分节点不出现。详细介绍：https://linux.do/t/topic/1383821
-
-* **scripts10**：jsDelivr 近期加强了对代理相关规则仓库的限制，导致直接通过 cdn.jsdelivr.net 访问这些链接时会提示“User blocked”。所以切换至稳定的 GitHub Raw 链接。同时引入了 AI 专项和精细的大厂服务分流，因为现在不仅使用了 ACL4SSR 维护的规则列表，所以取消了变量拼接。规则提供者从10个扩展至约23个，融合 Loyalsoldier 与 ACL4SSR 规则集，新增了对 AI、Telegram、Netflix 等海外服务的专用代理支持，以及更彻底的广告与隐私追踪阻断（如EasyPrivacy、BanEasyListChina），分流逻辑更精细全面。
-
-* **scripts11**：因 jsDelivr 限制切换至 GitHub Raw 直链，规则提供者从 11 个扩展至 23 个。新增 AntiAD（20万+规则）和 AWAvenue 两大广告拦截利器，广告拦截规则从 2 个增至 7 个。融合 Loyalsoldier、ACL4SSR、anti-AD 和 AWAvenue 四大规则源，新增 AI、Telegram、Netflix、Apple、Microsoft 等精细服务分流。总规则覆盖从 ~1 万条提升至 ~24.5 万条，广告拦截效果提升。
-
-  
+## 主要改进说明
+1. 地区分组优化
+  采用更合理的排序：香港 → 台湾 → 日本 → 韩国 → 美国 → 新加坡 → 其他国家
+  增加了较为完整的地区覆盖
+  使用Map数据结构提高分组效率
+  添加兜底机制，确保所有节点都能被归类
+2. 全面错误处理
+  顶层try-catch：捕获所有意外异常，保证脚本始终返回有效配置
+  节点过滤保护：单个节点处理失败不影响整体
+  正则表达式安全：验证正则表达式创建，提供回退方案
+  配置验证：检查配置对象和数组的完整性
+3. 规则集优化
+  简化规则提供者，使用Loyalsoldier的现代规则集
+  优化规则顺序，提高匹配效率
+  每个规则配置都添加错误处理
+4. 安全增强
+  防御性编程，检查所有对象和数组
+  配置降级机制，即使出错也能返回基本可用配置
+  详细的错误日志，便于问题诊断
+5. 性能优化
+  避免重复正则表达式创建
+  减少不必要的数组操作
+  优化地区匹配算法
 ---
 
 **持续优化中，欢迎反馈使用体验！**
