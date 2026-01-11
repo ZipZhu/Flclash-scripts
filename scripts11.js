@@ -38,7 +38,7 @@ function main(config) {
   const validRegions = [];
 
   for (const region of REGIONS) {
-    const regex = new RegExp(region.pattern);
+    const regex = new RegExp(region.pattern, "i");
     if (filteredProxies.some(proxy => regex.test(proxy.name))) {
       validRegions.push(region);
     }
@@ -56,7 +56,7 @@ function main(config) {
   });
 
   for (const region of validRegions) {
-    const regex = new RegExp(region.pattern);
+    const regex = new RegExp(region.pattern, "i");
     const regionProxies = filteredProxies
       .filter(proxy => regex.test(proxy.name))
       .map(proxy => proxy.name);
