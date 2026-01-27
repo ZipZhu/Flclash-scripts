@@ -6,7 +6,7 @@ function main(config) {
   const ratioRegex = /(?:\[(\d+(?:\.\d+)?)\s*(?:x|X|×)\]|(\d+(?:\.\d+)?)\s*(?:x|X|×|倍)|(?:x|X|×|倍)\s*(\d+(?:\.\d+)?))/i;
 
   const filterKeywords = '(?<!集)群|邀请|返利|官方|网址|订阅|购买|续费|剩余|到期|过期|流量|备用|邮箱|客服|联系|工单|倒卖|防止|梯子|tg|发布|重置';
-  const blackListRegex = new RegExp(filterKeywords);
+  const blackListRegex = new RegExp(filterKeywords,'i');
 
   function normalizeName(name = '') {
     return String(name)
