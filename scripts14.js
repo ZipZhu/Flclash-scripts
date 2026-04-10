@@ -6,6 +6,11 @@ function main(config) {
   const blackRe = /(?<!集)群|邀请|返利|官方|官网|网址|订阅|购买|续费|剩余|到期|过期|流量|备用|邮箱|客服|联系|工单|倒卖|防止|梯子|tg|发布|重置/i;
   const flagMap = { '🇺🇸': 'US', '🇯🇵': 'JP', '🇸🇬': 'SG', '🇭🇰': 'HK', '🇹🇼': 'TW' };
 
+  const myManualRules = [
+    "DOMAIN-SUFFIX,cn,DIRECT",
+    "DOMAIN-SUFFIX,jianguoyun.com,DIRECT",
+  ];
+
   const allProxies = config.proxies || [];
   const proxies = allProxies.filter(p => {
     if (!p?.name || blackRe.test(p.name)) return false;
@@ -46,7 +51,14 @@ function main(config) {
     { name: "GLOBAL", icon: `${ICON}Global.png`, type: "select", proxies: ["节点选择", ...regionNames, "手动切换", "DIRECT"] },
   ];
 
-  const providers = { LocalAreaNetwork: rp("LocalAreaNetwork"), UnBan: rp("UnBan"), BanAD: rp("BanAD"), BanProgramAD: rp("BanProgramAD"), ProxyGFWlist: rp("ProxyGFWlist"), ChinaDomain: rp("ChinaDomain") };
+  const providers = { 
+  LocalAreaNetwork: rp("LocalAreaNetwork"), 
+  UnBan: rp("UnBan"),
+  BanAD: rp("BanAD"),
+  BanProgramAD: rp("BanProgramAD"),
+  ProxyGFWlist: rp("ProxyGFWlist"),
+  ChinaDomain: rp("ChinaDomain") 
+  };
 
   const valid = new Set(["DIRECT", "REJECT", "REJECT-DROP", "PASS", ...groups.map(g => g.name), ...allProxies.map(p => p.name)]);
   const providerKeys = new Set(Object.keys(providers));
@@ -68,13 +80,16 @@ function main(config) {
   config["proxy-groups"] = groups;
   config["rule-providers"] = providers;
   config["rules"] = [
-    "DOMAIN-SUFFIX,cn,DIRECT",
-    "DOMAIN-SUFFIX,jianguoyun.com,DIRECT",
-    "RULE-SET,LocalAreaNetwork,DIRECT", "RULE-SET,UnBan,DIRECT",
-    "RULE-SET,BanAD,REJECT", "RULE-SET,BanProgramAD,REJECT",
+    ...myManualRules,
+    "RULE-SET,LocalAreaNetwork,DIRECT",
+    "RULE-SET,UnBan,DIRECT",
+    "RULE-SET,BanAD,REJECT",
+    "RULE-SET,BanProgramAD,REJECT",
     ...custom,
-    "RULE-SET,ProxyGFWlist,节点选择", "RULE-SET,ChinaDomain,DIRECT",
-    "GEOIP,CN,DIRECT", "MATCH,节点选择",
+    "RULE-SET,ProxyGFWlist,节点选择",
+    "RULE-SET,ChinaDomain,DIRECT",
+    "GEOIP,CN,DIRECT",
+    "MATCH,节点选择",
   ];
   config.proxies = allProxies;
   return config;
