@@ -66,7 +66,12 @@ function main(config) {
     })
     .map(rule => {
       let parts = rule.split(',');
-      if (parts.length >= 3 && !validTargets.has(parts[2].trim())) parts[2] = "节点选择";
+      if (parts.length >= 3 && !validTargets.has(parts[2].trim())) {
+        const t = parts[2];
+        if (/直连/.test(t)) parts[2] = "DIRECT";
+        else if (/拦截|广告/.test(t)) parts[2] = "REJECT";
+        else parts[2] = "节点选择";
+      }
       return parts.join(',');
     });
 
