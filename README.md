@@ -58,7 +58,15 @@
 
 * **scripts13**：在scripts12基础上修改，将原来的分流规则覆盖改为了合并，最高优先级屏蔽广告/内网直连 ➡️ 机场自带规则 ➡️ GFW/CN 泛解析兜底。自动拦截并修复失效的策略组指向（重定向至“节点选择”），告别了 `proxy not found` 导致的配置加载失败。使用现代 JS 语法全面重构了底层逻辑，减少了冗余循环，脚本运行更快、代码更清爽。仅不到80行。
 
-*  **scripts14**：在scripts13基础上修改，经确认，flclash的覆写脚本与附加规则无法同时生效，因此添加了 `myManualRules` ，可以根据个人需要在 `myManualRules` 中添加规则。过滤掉原始配置中引用了本脚本未定义的 `rule-provider` 的 `RULE-SET` 规则，避免 "rule set [xxx] not found" 报错。修复原始规则中带有中文策略组名（如"🎯 全球直连""🛑 广告拦截"）被一律替换为"节点选择"的问题，改为按关键字智能映射：含"直连"→DIRECT，含"拦截/广告"→REJECT，其余→节点选择。
+* **scripts14**：基于 scripts13 修改。经确认，FLClash 的覆写脚本与附加规则无法同时生效，因此添加了 `myManualRules`，可根据个人需要在其中添加规则。
+
+  - 过滤掉原始配置中引用了本脚本未定义的 `rule-provider` 的 `RULE-SET` 规则，避免 `rule set [xxx] not found` 报错。
+  - 修复原始规则中带有中文策略组名（如 `🎯 全球直连`、`🛑 广告拦截`）被一律替换为 `节点选择` 的问题，改为按关键字智能映射：含"直连"→`DIRECT`，含"拦截/广告"→`REJECT`，其余→`节点选择`。
+  - 为 IP 类规则自动追加 `no-resolve`，避免触发不必要的 DNS 解析。
+  - `rule-providers` 用 `rp()` 工厂函数生成，消除重复结构。
+  - `REGIONS` 从对象数组改为元组数组，减少冗余字段名。
+  - emoji 国旗替换改为 `flagMap` + `replaceAll`，抽成独立的 `norm()` 函数。
+  - target 映射逻辑抽成 `mapTarget()` 单行函数。
 
 ---
 
