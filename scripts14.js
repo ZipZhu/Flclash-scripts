@@ -66,11 +66,14 @@ function main(config) {
     })
     .map(rule => {
       let parts = rule.split(',');
-      if (parts.length >= 3 && !validTargets.has(parts[2].trim())) {
-        const t = parts[2];
-        if (/直连/.test(t)) parts[2] = "DIRECT";
-        else if (/拦截|广告/.test(t)) parts[2] = "REJECT";
-        else parts[2] = "节点选择";
+      if (parts.length >= 3) {
+        const target = parts[2].trim();
+        if (!validTargets.has(target)) {
+          if (/直连/.test(target)) parts[2] = "DIRECT";
+          else if (/拦截|广告/.test(target)) parts[2] = "REJECT";
+          else parts[2] = "节点选择";
+        }
+        if (parts[0].trim().includes("IP")) parts[3] = "no-resolve";
       }
       return parts.join(',');
     });
