@@ -1,101 +1,81 @@
 function main(config) {
-  const ICON_BASE = "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
-  const RULE_BASE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
+  const ICON = "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/";
+  const RULE = "https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/";
 
-  const ratioRegex = /(?:\[(\d+(?:\.\d+)?)\s*(?:x|X|×)\]|(\d+(?:\.\d+)?)\s*(?:x|X|×|倍)|(?:x|X|×|倍)\s*(\d+(?:\.\d+)?))/i;
-  const blackListRegex = /(?<!集)群|邀请|返利|官方|官网|网址|订阅|购买|续费|剩余|到期|过期|流量|备用|邮箱|客服|联系|工单|倒卖|防止|梯子|tg|发布|重置/i;
+  const ratioRe = /(?:\[(\d+(?:\.\d+)?)\s*[xX×]\]|(\d+(?:\.\d+)?)\s*[xX×倍]|[xX×倍]\s*(\d+(?:\.\d+)?))/i;
+  const blackRe = /(?<!集)群|邀请|返利|官方|官网|网址|订阅|购买|续费|剩余|到期|过期|流量|备用|邮箱|客服|联系|工单|倒卖|防止|梯子|tg|发布|重置/i;
+  const flagMap = { '🇺🇸': 'US', '🇯🇵': 'JP', '🇸🇬': 'SG', '🇭🇰': 'HK', '🇹🇼': 'TW' };
 
-  const originalProxies = config.proxies || [];
-
-  const filteredProxies = originalProxies.filter(p => {
-    if (!p?.name || blackListRegex.test(p.name)) return false;
-    const match = p.name.match(ratioRegex);
-    return !(match && parseFloat(match[1] || match[2] || match[3]) > 3.0);
+  const allProxies = config.proxies || [];
+  const proxies = allProxies.filter(p => {
+    if (!p?.name || blackRe.test(p.name)) return false;
+    const m = p.name.match(ratioRe);
+    return !(m && parseFloat(m[1] || m[2] || m[3]) > 3);
   });
 
-  if (!filteredProxies.length && !originalProxies.length) return config;
+  if (!proxies.length && !allProxies.length) return config;
 
-  const proxiesWithNorm = filteredProxies.map(p => ({
-    ...p,
-    __normName: p.name.trim().replace(/\s+/g, '').replace(/[【】[\]（）()]/g, '').replace(/🇺🇸/g, 'US').replace(/🇯🇵/g, 'JP').replace(/🇸🇬/g, 'SG').replace(/🇭🇰/g, 'HK').replace(/🇹🇼/g, 'TW')
-  }));
-
-  const REGIONS = [
-    { name: "美国节点", pattern: "美国|美|US|USA|UnitedStates|United States|纽约|NewYork|NYC|JFK|洛杉矶|LosAngeles|LAX|旧金山|SanFrancisco|SFO|圣何塞|SanJose|SJC|西雅图|Seattle|SEA|芝加哥|Chicago|ORD|达拉斯|Dallas|DFW|硅谷|SiliconValley", icon: "United_States.png" },
-    { name: "日本节点", pattern: "日本|日|JP|JPN|Japan|东京|Tokyo|TYO|NRT|HND|大阪|Osaka|KIX", icon: "Japan.png" },
-    { name: "狮城节点", pattern: "新加坡|狮城|SG|SGP|Singapore|SIN", icon: "Singapore.png" },
-    { name: "香港节点", pattern: "香港|港|HK|HKG|HongKong|Hong Kong", icon: "Hong_Kong.png" },
-    { name: "台湾节点", pattern: "台湾|台|TW|TWN|Taiwan|台北|Taipei|TPE|新北|NewTaipei", icon: "Taiwan.png" }
-  ];
-
-  const activeRegions = REGIONS.map(region => {
-    const regex = new RegExp(region.pattern.split('|').map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
-    return { ...region, proxies: proxiesWithNorm.filter(p => regex.test(p.__normName)).map(p => p.name) };
-  }).filter(r => r.proxies.length > 0);
-
-  const regionNames = activeRegions.map(r => r.name);
-
-  const proxyGroups = [
-    { name: "节点选择", icon: `${ICON_BASE}Proxy.png`, type: "select", proxies: [...regionNames, "手动切换"] },
-    ...activeRegions.map(r => ({ name: r.name, icon: `${ICON_BASE}${r.icon}`, type: "url-test", proxies: r.proxies, interval: 300, tolerance: 50 })),
-    { name: "手动切换", icon: `${ICON_BASE}Available.png`, "include-all": true, type: "select" },
-    { name: "GLOBAL", icon: `${ICON_BASE}Global.png`, type: "select", proxies: ["节点选择", ...regionNames, "手动切换", "DIRECT"] }
-  ];
-  config["proxy-groups"] = proxyGroups;
-
-  config["rule-providers"] = {
-    LocalAreaNetwork: { url: `${RULE_BASE}LocalAreaNetwork.list`, path: "./ruleset/LocalAreaNetwork.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
-    UnBan: { url: `${RULE_BASE}UnBan.list`, path: "./ruleset/UnBan.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
-    BanAD: { url: `${RULE_BASE}BanAD.list`, path: "./ruleset/BanAD.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
-    BanProgramAD: { url: `${RULE_BASE}BanProgramAD.list`, path: "./ruleset/BanProgramAD.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
-    ProxyGFWlist: { url: `${RULE_BASE}ProxyGFWlist.list`, path: "./ruleset/ProxyGFWlist.list", behavior: "classical", interval: 86400, format: "text", type: "http" },
-    ChinaDomain: { url: `${RULE_BASE}ChinaDomain.list`, path: "./ruleset/ChinaDomain.list", behavior: "classical", interval: 86400, format: "text", type: "http" }
+  const norm = name => {
+    let s = name.trim().replace(/\s+/g, '').replace(/[【】[\]（）()]/g, '');
+    for (const [flag, code] of Object.entries(flagMap)) s = s.replaceAll(flag, code);
+    return s;
   };
 
-  const validTargets = new Set(["DIRECT", "REJECT", "REJECT-DROP", "PASS", ...proxyGroups.map(g => g.name), ...originalProxies.map(p => p.name)]);
-  const myRuleProviders = new Set(Object.keys(config["rule-providers"]));
+  const REGIONS = [
+    ["美国节点", "美国|美|US|USA|UnitedStates|United States|纽约|NewYork|NYC|JFK|洛杉矶|LosAngeles|LAX|旧金山|SanFrancisco|SFO|圣何塞|SanJose|SJC|西雅图|Seattle|SEA|芝加哥|Chicago|ORD|达拉斯|Dallas|DFW|硅谷|SiliconValley", "United_States.png"],
+    ["日本节点", "日本|日|JP|JPN|Japan|东京|Tokyo|TYO|NRT|HND|大阪|Osaka|KIX", "Japan.png"],
+    ["狮城节点", "新加坡|狮城|SG|SGP|Singapore|SIN", "Singapore.png"],
+    ["香港节点", "香港|港|HK|HKG|HongKong|Hong Kong", "Hong_Kong.png"],
+    ["台湾节点", "台湾|台|TW|TWN|Taiwan|台北|Taipei|TPE|新北|NewTaipei", "Taiwan.png"],
+  ];
 
-  const customRules = (config.rules || [])
-    .filter(rule => !rule.startsWith("MATCH,"))
-    .filter(rule => {
-      if (rule.startsWith("RULE-SET,")) {
-        const providerName = rule.split(',')[1];
-        return myRuleProviders.has(providerName);
+  const regions = REGIONS.map(([name, pat, icon]) => {
+    const re = new RegExp(pat.split('|').map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'i');
+    const matched = proxies.filter(p => re.test(norm(p.name))).map(p => p.name);
+    return matched.length ? { name, icon, matched } : null;
+  }).filter(Boolean);
+
+  const regionNames = regions.map(r => r.name);
+
+  const rp = (name) => ({ url: `${RULE}${name}.list`, path: `./ruleset/${name}.list`, behavior: "classical", interval: 86400, format: "text", type: "http" });
+
+  const groups = [
+    { name: "节点选择", icon: `${ICON}Proxy.png`, type: "select", proxies: [...regionNames, "手动切换"] },
+    ...regions.map(r => ({ name: r.name, icon: `${ICON}${r.icon}`, type: "url-test", proxies: r.matched, interval: 300, tolerance: 50 })),
+    { name: "手动切换", icon: `${ICON}Available.png`, "include-all": true, type: "select" },
+    { name: "GLOBAL", icon: `${ICON}Global.png`, type: "select", proxies: ["节点选择", ...regionNames, "手动切换", "DIRECT"] },
+  ];
+
+  const providers = { LocalAreaNetwork: rp("LocalAreaNetwork"), UnBan: rp("UnBan"), BanAD: rp("BanAD"), BanProgramAD: rp("BanProgramAD"), ProxyGFWlist: rp("ProxyGFWlist"), ChinaDomain: rp("ChinaDomain") };
+
+  const valid = new Set(["DIRECT", "REJECT", "REJECT-DROP", "PASS", ...groups.map(g => g.name), ...allProxies.map(p => p.name)]);
+  const providerKeys = new Set(Object.keys(providers));
+
+  const mapTarget = t => /直连/.test(t) ? "DIRECT" : /拦截|广告/.test(t) ? "REJECT" : "节点选择";
+
+  const custom = (config.rules || [])
+    .filter(r => !r.startsWith("MATCH,"))
+    .filter(r => !r.startsWith("RULE-SET,") || providerKeys.has(r.split(',')[1]))
+    .map(r => {
+      const p = r.split(',');
+      if (p.length >= 3) {
+        if (!valid.has(p[2].trim())) p[2] = mapTarget(p[2]);
+        if (p[0].trim().includes("IP")) p[3] = "no-resolve";
       }
-      return true;
-    })
-    .map(rule => {
-      let parts = rule.split(',');
-      if (parts.length >= 3) {
-        const target = parts[2].trim();
-        if (!validTargets.has(target)) {
-          if (/直连/.test(target)) parts[2] = "DIRECT";
-          else if (/拦截|广告/.test(target)) parts[2] = "REJECT";
-          else parts[2] = "节点选择";
-        }
-        if (parts[0].trim().includes("IP")) parts[3] = "no-resolve";
-      }
-      return parts.join(',');
+      return p.join(',');
     });
 
-  const myManualRules = [
+  config["proxy-groups"] = groups;
+  config["rule-providers"] = providers;
+  config["rules"] = [
     "DOMAIN-SUFFIX,cn,DIRECT",
     "DOMAIN-SUFFIX,jianguoyun.com,DIRECT",
+    "RULE-SET,LocalAreaNetwork,DIRECT", "RULE-SET,UnBan,DIRECT",
+    "RULE-SET,BanAD,REJECT", "RULE-SET,BanProgramAD,REJECT",
+    ...custom,
+    "RULE-SET,ProxyGFWlist,节点选择", "RULE-SET,ChinaDomain,DIRECT",
+    "GEOIP,CN,DIRECT", "MATCH,节点选择",
   ];
-
-  config["rules"] = [
-    ...myManualRules,
-    "RULE-SET,LocalAreaNetwork,DIRECT",
-    "RULE-SET,UnBan,DIRECT",
-    "RULE-SET,BanAD,REJECT",
-    "RULE-SET,BanProgramAD,REJECT",
-    ...customRules,
-    "RULE-SET,ProxyGFWlist,节点选择",
-    "RULE-SET,ChinaDomain,DIRECT",
-    "GEOIP,CN,DIRECT",
-    "MATCH,节点选择"
-  ];
-
-  config.proxies = originalProxies;
+  config.proxies = allProxies;
   return config;
 }
