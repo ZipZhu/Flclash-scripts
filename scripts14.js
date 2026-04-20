@@ -41,7 +41,6 @@ function main(config) {
   }).filter(Boolean);
 
   const regionNames = regions.map(r => r.name);
-
   const rp = (name) => ({ url: `${RULE}${name}.list`, path: `./ruleset/${name}.list`, behavior: "classical", interval: 86400, format: "text", type: "http" });
 
   const groups = [
@@ -52,27 +51,26 @@ function main(config) {
   ];
 
   const providers = { 
-  LocalAreaNetwork: rp("LocalAreaNetwork"), 
-  UnBan: rp("UnBan"),
-  BanAD: rp("BanAD"),
-  BanProgramAD: rp("BanProgramAD"),
-  ProxyGFWlist: rp("ProxyGFWlist"),
-  ChinaDomain: rp("ChinaDomain") 
+    LocalAreaNetwork: rp("LocalAreaNetwork"), 
+    UnBan: rp("UnBan"),
+    BanAD: rp("BanAD"),
+    BanProgramAD: rp("BanProgramAD"),
+    ProxyGFWlist: rp("ProxyGFWlist"),
+    ChinaDomain: rp("ChinaDomain") 
   };
 
   const valid = new Set(["DIRECT", "REJECT", "REJECT-DROP", "PASS", ...groups.map(g => g.name), ...allProxies.map(p => p.name)]);
   const providerKeys = new Set(Object.keys(providers));
-
   const mapTarget = t => /直连/.test(t) ? "DIRECT" : /拦截|广告/.test(t) ? "REJECT" : "节点选择";
 
   const custom = (config.rules || [])
-    .filter(r => !r.startsWith("MATCH,"))
-    .filter(r => !r.startsWith("RULE-SET,") || providerKeys.has(r.split(',')[1]))
+    .filter(r => !r.startsWith("MATCH,") && (!r.startsWith("RULE-SET,") || providerKeys.has(r.split(',')[1])))
     .map(r => {
+      if (/^(AND|OR|NOT|SUB-RULE),/i.test(r = r.trim())) return r; 
       const p = r.split(',');
       if (p.length >= 3) {
-        if (!valid.has(p[2].trim())) p[2] = mapTarget(p[2]);
-        if (p[0].trim().includes("IP")) p[3] = "no-resolve";
+        if (!valid.has(p[2].trim())) p[2] = mapTarget(p[2].trim());
+        if (p[0].includes("IP") && !p.slice(3).some(x => x.trim() === "no-resolve")) p.push("no-resolve");
       }
       return p.join(',');
     });
@@ -92,5 +90,6 @@ function main(config) {
     "MATCH,节点选择",
   ];
   config.proxies = allProxies;
+  
   return config;
 }
