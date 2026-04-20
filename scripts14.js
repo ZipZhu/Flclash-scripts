@@ -89,7 +89,7 @@ function main(config) {
     "GEOIP,CN,DIRECT",
     "MATCH,节点选择",
   ];
-  config.proxies = allProxies;
   
+  config.proxies = allProxies;
   return config;
 }
